@@ -1,0 +1,39 @@
+services:
+  n8n:
+    image: docker.n8n.io/n8nio/n8n
+    ports:
+      - "5678:5678"
+    volumes:
+      - n8n_data:/home/node/.n8n
+    depends_on:
+      - ollama
+    environment:
+      - WEBHOOK_URL=https://weaklier-unvauntingly-braylon.ngrok-free.dev
+  ollama:
+    image: ollama/ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_models:/root/.ollama
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=masebav19
+      - MONGO_INITDB_ROOT_PASSWORD=1723408553
+      - MONGO_INITDB_DATABASE=RedesTest
+    volumes:
+      - mondo_data:/data/db
+
+volumes:
+  n8n_data:
+  ollama_models:
+  mondo_data:

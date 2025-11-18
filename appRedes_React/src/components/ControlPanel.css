@@ -1,0 +1,107 @@
+#ControlPanelContaienr{
+    width: 30vw;
+    height: 100%;
+    border: solid 1px #b0b0b0;
+    box-shadow: 0px 0px 2px 1px #5d5d5d;
+    padding-left: 6px;
+    padding-right: 6px;
+}
+
+.buttonConatiner{
+    width: 100%;
+    padding: 6px;
+    padding-top: 15px;
+    display: flex;
+    justify-content: center;
+    gap: 5vw;
+}
+.buttonConatiner img{
+    height: 50%;
+    
+}
+.start,.stop{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.buttonConatiner p{
+    margin: 10px;
+}
+.ControlButton.pressed{
+    transform: scale(0.9);
+    transition: transform 0.1s ease;
+}
+.ControlButton{
+    transition: transform 0.1s ease;
+}
+.SepPointConatiner, .EstatesConatiner{
+    display: grid;
+    grid-template-columns: 0.8fr 4vw;
+    padding: 6px;
+    gap: 5px;
+}
+.EstatesConatiner{
+    align-items: center;
+    gap: 5px;
+}
+.EstatesConatiner p{
+    display: block;
+    width:  4.5vw;
+    height: 3vh;
+    background: white;
+    margin: 0;
+    border: solid 1px black;
+}
+.EstatesConatiner p{
+    padding-left: 5px;
+    padding-right: 5px;
+}
+.SepPointConatiner input{
+    width: 4vw;
+}
+.inputContainer{
+    display: flex;
+    
+}
+#SpReserva,#SpDistrib{
+    font-size: 14px;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+.spcontainer p{
+    padding-left: 2px;
+    padding-right: 2px;
+    display: block;
+    width:  4.1vw;
+    height: 3vh;
+    background: white;
+    margin: 0;
+    border: solid 1px black;
+    font-size: 14px;
+}
+.spcontainer .invisible{
+    display: block;
+    display: none;
+}
+
+@media (max-width: 650px){
+    #ControlPanelContaienr{
+        font-size: 14px;
+    }
+    .buttonConatiner{
+        padding: 2px;
+        gap: 0;
+        font-size: 13px;
+    }
+    .buttonConatiner img{
+        height: 35%;
+    }
+    .spcontainer p{
+       width: 7vw;
+    }
+    .SepPointConatiner input{
+        width: 7vw;
+    }
+    
+}

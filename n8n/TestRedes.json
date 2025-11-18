@@ -1,0 +1,226 @@
+{
+  "name": "TestRedes",
+  "nodes": [
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -1504,
+        -656
+      ],
+      "id": "75fb9130-1eb9-4b24-9bd9-8b329668baf5",
+      "name": "Telegram Trigger",
+      "webhookId": "3533cc5c-5e17-40d8-b704-aaf30d5c6adb",
+      "credentials": {
+        "telegramApi": {
+          "id": "HzialL1SLkbVXvWh",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "Eres un asistente encargado de dar información acerca de los datos de un proceso de dos tanques controlado por PLC, tienes dos herramientas, una conexión a una base de datos en mongoDB, la base de datos se llama \"RedesTest\" y la colección donde están los datos se llama \"ProcessData\", la segunda herramienta es para solicitar información a un servidor en python para leer los datos en ese momento. Úsalos cuando el cliente te solicite información del proceso"
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3,
+      "position": [
+        -1248,
+        -640
+      ],
+      "id": "bfbfd08f-ff50-4ff9-bd2e-ba1b132d8e00",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {
+          "appendAttribution": false
+        }
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        -800,
+        -656
+      ],
+      "id": "6795ef4b-bd3c-4d96-b12d-09d8d73b11f6",
+      "name": "Send a text message",
+      "webhookId": "11738e07-36ee-4c8b-8649-2abf7e87090d",
+      "credentials": {
+        "telegramApi": {
+          "id": "HzialL1SLkbVXvWh",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "descriptionType": "manual",
+        "toolDescription": "Busca los datos del proceso, la base de datos se llama RedesTest y la colección de llama ProcessData",
+        "collection": "ProcessData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.mongoDbTool",
+      "typeVersion": 1.2,
+      "position": [
+        -1024,
+        -496
+      ],
+      "id": "e2f6f401-d1ce-4488-98ae-806255431924",
+      "name": "Find documents in MongoDB",
+      "credentials": {
+        "mongoDb": {
+          "id": "NL8xjmWAmTeptsSC",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Realiza esta solitud para conocer el estado actual del proceso",
+        "url": "http://localhost:8000/GetPLCData",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.3,
+      "position": [
+        -896,
+        -496
+      ],
+      "id": "4a46a0b3-6937-445b-b006-8caa28f1b624",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $json.message.from.id }}",
+        "databaseName": "RedesTest"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryMongoDbChat",
+      "typeVersion": 1,
+      "position": [
+        -1184,
+        -496
+      ],
+      "id": "ca8ba4db-7164-4f96-9ed7-496cb41d0b58",
+      "name": "MongoDB Chat Memory",
+      "credentials": {
+        "mongoDb": {
+          "id": "NL8xjmWAmTeptsSC",
+          "name": "MongoDB account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatGoogleGemini",
+      "typeVersion": 1,
+      "position": [
+        -1312,
+        -496
+      ],
+      "id": "92cf8afb-2e17-473d-9a78-1f0297153fc4",
+      "name": "Google Gemini Chat Model",
+      "credentials": {
+        "googlePalmApi": {
+          "id": "yI9xJQFtTKKq8Y6b",
+          "name": "Google Gemini(PaLM) Api account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Find documents in MongoDB": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "MongoDB Chat Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Google Gemini Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "1d9bab40-fcfe-4980-891f-80626298b745",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "49dfa86dde9e504692fc9ff4f18ef71172bf615486741c1a5262d5a44b7dc334"
+  },
+  "id": "eNYJcOprDkXCYV97",
+  "tags": []
+}

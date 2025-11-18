@@ -1,0 +1,53 @@
+POST http://localhost:8000/write
+Content-Type: "application/json"
+
+{"data":[
+    {
+        "Address":"N7:2",
+        "Value":60
+    },
+    {
+        "Address":"N7:3",
+        "Value":10
+    },
+    {
+        "Address":"B3:0/0",
+        "Value":0
+    },
+    {
+        "Address":"B3:0/1",
+        "Value":0
+    },
+    {
+        "Address":"N7:0"
+    },
+    {
+        "Address":"N7:1"
+
+    },
+    {
+        "Address":"B3:0/2"
+    },
+    {
+        "Address":"B3:0/3"
+    },
+    {
+        "Address":"B3:0/4"
+    }
+],
+"ip_address":"192.168.10.21",
+"Device_items":{
+    "N7:2": "SpLevelReserva",
+    "N7:3": "SpLevelDistrib",
+    "B3:0/0": "Marcha",
+    "B3:0/1": "Paro",
+    "N7:0":"LevelReserva",
+    "N7:1":"SpLevelDistrib",
+    "B3:0/2": "Bomba1",
+    "B3:0/3": "Bomba2",
+    "B3:0/4": "Bomba3"
+}
+}
+
+###
+GET http://localhost:8000/readAll

@@ -1,0 +1,2 @@
+- Correr el archivo compose con docker compose up 
+- Pra poder establecer comunicación con telegram se debe instalar un software que sirve de tunel llamado ngrok
