@@ -1,0 +1,17 @@
+{
+  "schemaVersion": 1,
+  "receiptId": "1299654b-9550-4dc6-bf10-91383a624732",
+  "status": "current",
+  "command": "deliver",
+  "type": "architecture",
+  "input": "D:\\Proyectos\\Redes Industriales\\Plataforma-Digitalizaci-n\\.archify\\architecture-digitalizacion-procesos-industriales-20261030-122434\\candidate.json",
+  "output": "D:\\Proyectos\\Redes Industriales\\Plataforma-Digitalizaci-n\\.archify\\architecture-digitalizacion-procesos-industriales-20261030-122434\\digitalizacion-industrial.html",
+  "specification": {
+    "sha256": "5a0824ff2c2f8fda12f64110fdebc8b17e0ec958a286fcc53588166890d65088",
+    "bytes": 6070
+  },
+  "artifact": {
+    "sha256": "330d7efca5aeb7b1467081d673da9d6130c1bf17352b0c55ea64c836b1153cdf",
+    "bytes": 854564
+  }
+}

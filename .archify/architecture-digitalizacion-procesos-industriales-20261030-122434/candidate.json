@@ -1,0 +1,216 @@
+{
+  "schema_version": 1,
+  "diagram_type": "architecture",
+  "meta": {
+    "title": "Digitalización de procesos industriales",
+    "locale": "es",
+    "output": ".archify/architecture-digitalizacion-procesos-industriales-20261030-122434/digitalizacion-industrial.html",
+    "quality_profile": "showcase",
+    "repository": {
+      "url": "https://github.com/Masebav19/Plataforma-Digitalizaci-n.git",
+      "provider": "github",
+      "link_mode": "web",
+      "revision": "4137ea991770ab4d51c0cc69ad936ba4acade948"
+    }
+  },
+  "components": [
+    {
+      "id": "plc",
+      "type": "backend",
+      "label": "PLC Siemens S7-1200",
+      "sublabel": "Control de dos tanques",
+      "pos": [40, 320],
+      "size": [155, 72],
+      "sources": [
+        { "path": "Readme.md", "line": 5 },
+        { "path": "PLC Programs/Readme.md", "line": 1 }
+      ]
+    },
+    {
+      "id": "keepsrv",
+      "type": "backend",
+      "label": "KeepServerEx",
+      "sublabel": "Integración PLC y variables",
+      "pos": [260, 320],
+      "size": [165, 72],
+      "sources": [
+        { "path": "Readme.md", "line": 6 },
+        { "path": "KeepServerEx/Readme.md", "line": 1 }
+      ]
+    },
+    {
+      "id": "opcua",
+      "type": "backend",
+      "label": "Servidor OPC UA",
+      "sublabel": "Publicado por KeepServerEx",
+      "pos": [500, 320],
+      "size": [155, 72],
+      "sources": [
+        { "path": "Readme.md", "line": 6 },
+        { "path": "KeepServerEx/Readme.md", "line": 1 }
+      ]
+    },
+    {
+      "id": "aveva-gateway",
+      "type": "backend",
+      "label": "AVEVA Gateway",
+      "sublabel": "System Platform",
+      "pos": [760, 125],
+      "size": [165, 72],
+      "sources": [
+        { "path": "Readme.md", "line": 7 },
+        { "path": "Intouch/Readm.md", "line": 1 }
+      ]
+    },
+    {
+      "id": "intouch",
+      "type": "frontend",
+      "label": "InTouch HMI",
+      "sublabel": "Interfaz de operación",
+      "pos": [1015, 125],
+      "size": [150, 72],
+      "sources": [
+        { "path": "Readme.md", "line": 7 },
+        { "path": "Intouch/Readm.md", "line": 1 }
+      ]
+    },
+    {
+      "id": "node-red",
+      "type": "backend",
+      "label": "Node-RED",
+      "sublabel": "Dashboard · lectura / escritura OPC UA",
+      "pos": [760, 320],
+      "size": [170, 76],
+      "sources": [
+        { "path": "Node Red/flows.json", "line": 339, "end_line": 357 },
+        { "path": "Node Red/flows.json", "line": 586, "end_line": 606 },
+        { "path": "Node Red/flows.json", "line": 164, "end_line": 202 }
+      ]
+    },
+    {
+      "id": "thingsboard",
+      "type": "cloud",
+      "label": "ThingsBoard",
+      "sublabel": "Dashboard de telemetría",
+      "pos": [1015, 320],
+      "size": [150, 76],
+      "sources": [
+        { "path": "Readme.md", "line": 9 },
+        { "path": "Node Red/flows.json", "line": 828, "end_line": 855 }
+      ]
+    },
+    {
+      "id": "express-api",
+      "type": "backend",
+      "label": "API Express / Node.js",
+      "sublabel": "GET /lectura · POST /escritura",
+      "pos": [500, 555],
+      "size": [175, 76],
+      "sources": [
+        { "path": "ApiNode/index.js", "line": 12, "end_line": 28 },
+        { "path": "ApiNode/controllers/OPCUAClient.js", "line": 23, "end_line": 44 },
+        { "path": "ApiNode/controllers/OPCUAClient.js", "line": 50, "end_line": 108 }
+      ]
+    },
+    {
+      "id": "n8n",
+      "type": "backend",
+      "label": "n8n · Agente IA",
+      "sublabel": "Telegram · Ollama Qwen · export inactivo",
+      "pos": [760, 555],
+      "size": [190, 76],
+      "sources": [
+        { "path": "N8N/ProyectoJIEE.json", "line": 11, "end_line": 34 },
+        { "path": "N8N/ProyectoJIEE.json", "line": 40, "end_line": 105 },
+        { "path": "N8N/ProyectoJIEE.json", "line": 204 }
+      ]
+    },
+    {
+      "id": "telegram",
+      "type": "external",
+      "label": "Telegram",
+      "sublabel": "Canal de mensajes",
+      "pos": [1020, 555],
+      "size": [135, 76],
+      "sources": [
+        { "path": "N8N/ProyectoJIEE.json", "line": 91, "end_line": 125 }
+      ]
+    }
+  ],
+  "connections": [
+    {
+      "id": "plc-to-keepsrv",
+      "from": "plc",
+      "to": "keepsrv",
+      "label": "variables del proceso",
+      "variant": "emphasis"
+    },
+    {
+      "id": "keepsrv-to-opcua",
+      "from": "keepsrv",
+      "to": "opcua",
+      "label": "publica OPC UA",
+      "variant": "emphasis"
+    },
+    {
+      "id": "opcua-to-aveva",
+      "from": "opcua",
+      "to": "aveva-gateway",
+      "label": "OPC UA"
+    },
+    {
+      "id": "aveva-to-intouch",
+      "from": "aveva-gateway",
+      "to": "intouch",
+      "label": "intercambio de variables"
+    },
+    {
+      "id": "node-red-to-opcua",
+      "from": "node-red",
+      "to": "opcua",
+      "label": "OPC UA"
+    },
+    {
+      "id": "api-to-opcua",
+      "from": "express-api",
+      "to": "opcua",
+      "label": "OPC UA"
+    },
+    {
+      "id": "node-red-to-thingsboard",
+      "from": "node-red",
+      "to": "thingsboard",
+      "label": "HTTPS · telemetría",
+      "variant": "emphasis"
+    },
+    {
+      "id": "telegram-to-n8n",
+      "from": "telegram",
+      "to": "n8n",
+      "label": "mensaje"
+    },
+    {
+      "id": "n8n-to-telegram",
+      "from": "n8n",
+      "to": "telegram",
+      "label": "respuesta"
+    },
+    {
+      "id": "n8n-to-api",
+      "from": "n8n",
+      "to": "express-api",
+      "label": "HTTP"
+    }
+  ],
+  "cards": [
+    {
+      "dot": "amber",
+      "title": "Alcance de la evidencia",
+      "items": [
+        "La documentación describe el AVEVA Gateway, pero su configuración no está incluida en el repositorio.",
+        "El flujo exportado de n8n está inactivo; el diagrama muestra las integraciones definidas, no una ejecución confirmada.",
+        "La API Express no declara persistencia en base de datos."
+      ]
+    }
+  ]
+}
