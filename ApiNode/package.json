@@ -1,0 +1,26 @@
+{
+  "name": "proyectojiee",
+  "version": "1.0.0",
+  "description": "Servidor HTTP con un cliente OPC UA",
+  "keywords": [
+    "OPC",
+    "UA",
+    "HTTP"
+  ],
+  "license": "ISC",
+  "author": "Mateo Vasquez",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "dotenv": "^18.0.9",
+    "express": "^5.3.0",
+    "node-opcua-client": "^2.187.12"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.14"
+  }
+}

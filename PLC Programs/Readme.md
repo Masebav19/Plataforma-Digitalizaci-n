@@ -1,0 +1,1 @@
+La carptea contiene dos vesiones del programa del PLC, se adjunta un PDF de las dos vesiones donde se puede observar el programa en ladder del PLC.

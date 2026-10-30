@@ -1,0 +1,24 @@
+GET http://localhost:1234/lectura
+
+###
+POST http://localhost:1234/escritura
+Content-Type: application/json
+
+[
+    {
+        "name":"Marcha",
+        "value": 0
+    },
+    {
+        "name":"Paro",
+        "value": 0
+    },
+    {
+        "name":"SP1",
+        "value": 50
+    },
+    {
+        "name":"SP2",
+        "value": 20.5
+    }
+]

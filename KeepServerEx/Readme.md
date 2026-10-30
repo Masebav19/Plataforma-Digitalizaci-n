@@ -1,0 +1,1 @@
+En el pdf se presenta la configuración de KeepServerEx para conectarse al PLC Siemenes y levantar un servidor OPC UA.

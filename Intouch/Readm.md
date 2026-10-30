@@ -1,0 +1,1 @@
+Contiene el HMI completo de Intouch implementado. No contiene la configuración del GATEWAY del System PLatform Managment Console.

@@ -1,0 +1,217 @@
+{
+  "name": "ProyectoJIEE",
+  "nodes": [
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "={{ $json.message.text }}",
+        "options": {
+          "systemMessage": "Eres un asistente de un proceso que consta de dos tanques, con dos sensores de nivel y dos bombas. Tu trabajo será el de lectura o escritura de las variables en base a las herramientas que se te proporciona."
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 3.1,
+      "position": [
+        -112,
+        -16
+      ],
+      "id": "25456632-fbdc-4f60-9dd6-200cf4d1b8a6",
+      "name": "AI Agent"
+    },
+    {
+      "parameters": {
+        "model": "qwen3.5:4b",
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatOllama",
+      "typeVersion": 1,
+      "position": [
+        -208,
+        160
+      ],
+      "id": "b8ea61ef-bfae-4370-b51f-071d0b71eb2a",
+      "name": "Ollama Chat Model",
+      "credentials": {
+        "ollamaApi": {
+          "id": "cxoy9IsMe1XXOr2W",
+          "name": "Ollama account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "toolDescription": "Esta petición extraerá información sobre las variables del proceso,  recibirás un json con el siguiente formato:\n{\n\"value\": [\n    \"Valor del nivel del tanque Reserva\",\n    \"Valor del nivel del tanque Distribución\",\n    \"Estado de la bomba 1\",\n    \"Estado de la bomba 2\",\n    \"Valor del Set Point de nivel del tanque Reserva\",\n    \"Valor del Set Point de nivel del tanque Distribución\",\n    \"Estado de la marcha\",\n    \"Estado del paro\"\n  ]\n}",
+        "url": "http://192.168.10.188:1234/lectura",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.5,
+      "position": [
+        288,
+        144
+      ],
+      "id": "c8152a5a-cc97-4965-88c2-bbca26a3e287",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "sessionIdType": "customKey",
+        "sessionKey": "={{ $workflow.id }}"
+      },
+      "type": "@n8n/n8n-nodes-langchain.memoryBufferWindow",
+      "typeVersion": 1.4,
+      "position": [
+        -48,
+        160
+      ],
+      "id": "c72b2367-84f1-498f-99a9-acf57fb4ecfb",
+      "name": "Simple Memory"
+    },
+    {
+      "parameters": {
+        "toolDescription": "Esta petición enviará información de las variables del proceso,  enviarás un json en base al siguiente ejemplo:\n[\n    {\n        \"name\":\"Marcha\",\n        \"value\": 1\n    },\n    {\n        \"name\":\"Paro\",\n        \"value\": 0\n    },\n    {\n        \"name\":\"SP1\",\n        \"value\": 50\n    },\n    {\n        \"name\":\"SP2\",\n        \"value\": 20.5\n    }\n]",
+        "method": "POST",
+        "url": "http://192.168.10.188:1234/escritura",
+        "sendBody": true,
+        "specifyBody": "json",
+        "jsonBody": "={{ /*n8n-auto-generated-fromAI-override*/ $fromAI('JSON', ``, 'json') }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequestTool",
+      "typeVersion": 4.5,
+      "position": [
+        128,
+        144
+      ],
+      "id": "f04089d7-a38e-4f54-9988-678aaad3004b",
+      "name": "HTTP Request1"
+    },
+    {
+      "parameters": {
+        "updates": [
+          "message"
+        ],
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.5,
+      "position": [
+        -320,
+        -16
+      ],
+      "id": "6ff2eed6-9810-45d3-aca9-efc2bb573871",
+      "name": "Telegram Trigger",
+      "webhookId": "5681e77d-e7d8-4d2e-a86e-de59ae186aad",
+      "credentials": {
+        "telegramApi": {
+          "id": "Pzv8MnOKb3bRe5Mq",
+          "name": "Telegram account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "chatId": "={{ $('Telegram Trigger').item.json.message.chat.id }}",
+        "text": "={{ $json.output }}",
+        "additionalFields": {}
+      },
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [
+        256,
+        -16
+      ],
+      "id": "eb434702-9b1e-4096-b8f5-100732e1d295",
+      "name": "Send a text message",
+      "webhookId": "aab9fdd8-c0a7-4a8e-a653-fed64b7d86d2",
+      "credentials": {
+        "telegramApi": {
+          "id": "Pzv8MnOKb3bRe5Mq",
+          "name": "Telegram account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Ollama Chat Model": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simple Memory": {
+      "ai_memory": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_memory",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request1": {
+      "ai_tool": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "ai_tool",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Telegram Trigger": {
+      "main": [
+        [
+          {
+            "node": "AI Agent",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "AI Agent": {
+      "main": [
+        [
+          {
+            "node": "Send a text message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate"
+  },
+  "versionId": "63228991-02ab-47c5-a0a7-e08ecb61d581",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "69600af0994da082f1454cfc0f305775487a89ca77679d88f668cdadd0543c04"
+  },
+  "nodeGroups": [],
+  "id": "TplUYdrLfhxZj8Qu",
+  "tags": []
+}
